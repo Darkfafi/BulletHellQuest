@@ -4,6 +4,10 @@ public class BulletHellGamePhaseState : GamePhaseStateBase
 {
 	#region Editor Variables
 
+	[Header("Requirements")]
+	[SerializeField]
+	private Transform _shipSpawnPoint = null;
+
 	[SerializeField]
 	private BulletHellShip _shipPrefab = null;
 
@@ -20,10 +24,21 @@ public class BulletHellGamePhaseState : GamePhaseStateBase
 
 	protected override void OnEnter()
 	{
-		ShipInstance = Instantiate(_shipPrefab);
+		SpawnShip();
 	}
 
 	protected override void OnExit()
+	{
+		DestroyShip();
+	}
+
+	private void SpawnShip()
+	{
+		DestroyShip();
+		ShipInstance = Instantiate(_shipPrefab, _shipSpawnPoint != null ? _shipSpawnPoint.position : Vector3.zero, Quaternion.identity);
+	}
+
+	private void DestroyShip()
 	{
 		if (ShipInstance != null)
 		{

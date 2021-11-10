@@ -1,5 +1,5 @@
 ﻿public interface IState<TParent>
-		where TParent : class, IStatesParent
+		where TParent : IStatesParent
 {
 	TParent StateParent
 	{

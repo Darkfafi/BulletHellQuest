@@ -1,7 +1,7 @@
 ﻿using System;
 
 public class FiniteStateMachine<TStatesParent> : IDisposable
-	where TStatesParent : class, IStatesParent
+	where TStatesParent : IStatesParent
 {
 	public readonly IState<TStatesParent>[] States;
 	public readonly TStatesParent StatesParent;
@@ -61,7 +61,7 @@ public class FiniteStateMachine<TStatesParent> : IDisposable
 
 	public void SetState(IState<TStatesParent> state)
 	{
-		if (state != null && state.StateParent != StatesParent)
+		if (state != null && state.StateParent != null && (StatesParent == null || !state.StateParent.Equals(StatesParent)))
 		{
 			throw new Exception($"State is not part of StateMachine `{state.StateParent}` != `{StatesParent}`");
 		}

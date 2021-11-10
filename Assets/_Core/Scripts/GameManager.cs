@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour, IStatesParent
 
 	protected void Awake()
 	{
-		_fsm = new FiniteStateMachine<GameManager>(this, GetComponentsInChildren<GamePhaseStateBase>(), false);
+		_fsm = new FiniteStateMachine<GameManager>(this, transform.GetStates<GameManager>(), false);
 
 		_inputSystem = InputSystem.Instance;
 		_inputSystem.ActionDownEvent += OnActionDownEvent;
