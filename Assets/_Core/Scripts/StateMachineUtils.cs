@@ -10,7 +10,7 @@ public static class StateMachineUtils
 		foreach (Transform child in self)
 		{
 			var state = child.GetComponent<IState<TStatesParent>>();
-			if(state != null)
+			if(state != null && child.gameObject.activeInHierarchy)
 			{
 				states.Add(state);
 			}

@@ -25,15 +25,19 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 
 	[Header("Requirements")]
 	[SerializeField]
-	private Projectile _projectilePrefab = null;
-
+	private ProjectilesPoolChannel _projectilesPoolChannel = null;
+	[SerializeField]
+	private ProjectilesPool _projectilesPool = null;
 
 	private List<Projectile> _currentProjectiles = new List<Projectile>();
 	private Coroutine _projectilesRoutine = null;
 
-	protected void Start()
+	protected void Awake()
 	{
-		StartEmitter();
+		if (_projectilesPoolChannel != null)
+		{
+			_projectilesPool = _projectilesPoolChannel.ProjectilesPool;
+		}
 	}
 
 	public void StartEmitter()
@@ -64,7 +68,9 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 			{
 				if (TryGetEmitterData(i, out Vector2 emitterPos, out float emitterAngle, out Vector2 fireDirection))
 				{
-					Projectile projectile = Instantiate(_projectilePrefab, emitterPos, Quaternion.Euler(0f, 0f, emitterAngle));
+					Projectile projectile = _projectilesPool.Pop(null);
+					projectile.transform.position = emitterPos;
+					projectile.transform.rotation = Quaternion.Euler(0f, 0f, emitterAngle);
 					projectile.StartCoroutine(ProjectileRoutine(projectile, fireDirection, _movement, _fullPath));
 					_currentProjectiles.Add(projectile);
 				}
@@ -97,7 +103,7 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 			yield return null;
 		}
 
-		Destroy(projectile.gameObject);
+		_projectilesPool.Push(projectile);
 	}
 
 	private bool TryGetEmitterData(int index, out Vector2 emitterPos, out float emitterAngle, out Vector2 emitterDirection)
@@ -124,7 +130,9 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 		for (int i = 0; i < _emitAmount; i++)
 		{
 			if (TryGetEmitterData(i, out Vector2 emitterPos, out float emitAngle, out Vector2 _))
+			{
 				Handles.ConeHandleCap(GetInstanceID(), emitterPos, Quaternion.Euler(-emitAngle, 90f, 0f), 0.2f, EventType.Repaint);
+			}
 		}
 	}
 #endif
