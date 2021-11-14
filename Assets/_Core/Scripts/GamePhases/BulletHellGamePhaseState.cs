@@ -55,7 +55,7 @@ public class BulletHellGamePhaseState : GamePhaseStateBase, IStatesParent
 	private void SpawnShip()
 	{
 		DestroyShip();
-		ShipInstance = Instantiate(_shipPrefab, _shipSpawnPoint != null ? _shipSpawnPoint.position : Vector3.zero, Quaternion.identity);
+		ShipInstance = Instantiate(_shipPrefab, _shipSpawnPoint != null ? _shipSpawnPoint.position : Vector3.zero, _shipSpawnPoint != null ? _shipSpawnPoint.rotation : Quaternion.identity);
 	}
 
 	private void DestroyShip()

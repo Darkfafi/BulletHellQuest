@@ -73,7 +73,7 @@ public class BulletHellBossFightState : BulletHellPhaseStateBase, IStatesParent
 	private void SpawnBoss()
 	{
 		DestroyBoss();
-		BossInstance = Instantiate(_bossPrefab, _bossSpawnPoint != null ? _bossSpawnPoint.position : Vector3.zero, Quaternion.identity);
+		BossInstance = Instantiate(_bossPrefab, _bossSpawnPoint != null ? _bossSpawnPoint.position : Vector3.zero, _bossSpawnPoint != null ? _bossSpawnPoint.rotation : Quaternion.identity);
 	}
 
 	private void DestroyBoss()
