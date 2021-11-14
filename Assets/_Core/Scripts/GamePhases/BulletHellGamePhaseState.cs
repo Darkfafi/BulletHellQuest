@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BulletHellGamePhaseState : GamePhaseStateBase
+public class BulletHellGamePhaseState : GamePhaseStateBase, IStatesParent
 {
 	#region Editor Variables
 
@@ -13,6 +13,12 @@ public class BulletHellGamePhaseState : GamePhaseStateBase
 
 	#endregion
 
+	#region Variables
+
+	private FiniteStateMachine<BulletHellGamePhaseState> _fsm;
+
+	#endregion
+
 	#region Properties
 
 	public BulletHellShip ShipInstance
@@ -22,14 +28,28 @@ public class BulletHellGamePhaseState : GamePhaseStateBase
 
 	#endregion
 
+	public override void Initialize(GameManager parent)
+	{
+		base.Initialize(parent);
+		_fsm = new FiniteStateMachine<BulletHellGamePhaseState>(this, transform.GetStates<BulletHellGamePhaseState>(), false);
+	}
+
 	protected override void OnEnter()
 	{
 		SpawnShip();
+		_fsm.StartStateMachine();
 	}
 
 	protected override void OnExit()
 	{
+		_fsm.StopStateMachine();
 		DestroyShip();
+	}
+
+	public override void Deinitialize()
+	{
+		_fsm.Dispose();
+		base.Deinitialize();
 	}
 
 	private void SpawnShip()
@@ -42,7 +62,7 @@ public class BulletHellGamePhaseState : GamePhaseStateBase
 	{
 		if (ShipInstance != null)
 		{
-			Destroy(ShipInstance);
+			Destroy(ShipInstance.gameObject);
 			ShipInstance = null;
 		}
 	}
