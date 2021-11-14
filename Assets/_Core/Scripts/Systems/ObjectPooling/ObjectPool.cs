@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -39,7 +40,9 @@ public class ObjectPool<TComponent> : MonoBehaviour
 
 	public int AvailableInstances => _poolReferences.Count;
 
-	public int ClaimedInstances => _usedReferences.Count;
+	public int ClaimedInstancesCount => _usedReferences.Count;
+
+	public IReadOnlyList<TComponent> ClaimedInstances => _usedReferences;
 
 	#endregion
 
@@ -115,7 +118,6 @@ public class ObjectPool<TComponent> : MonoBehaviour
 
 		obj.transform.SetParent(parent, false);
 		obj.gameObject.SetActive(true);
-
 
 #if UNITY_EDITOR
 		name = "^Pool in Use (" + _usedReferences.Count + "/" + _poolSize + ")";

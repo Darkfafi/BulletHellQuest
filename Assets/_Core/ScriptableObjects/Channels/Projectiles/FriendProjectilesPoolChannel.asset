@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b8d415e9f469b47bd314265ec6d169, type: 3}
+  m_Name: FriendProjectilesPoolChannel
+  m_EditorClassIdentifier: 
+  _initialPoolCount: 200
+  _prefab: {fileID: 4353235495481431113, guid: 5d7be085ff5024a48bb096d699ab087f, type: 3}

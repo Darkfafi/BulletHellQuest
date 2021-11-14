@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7885063154835153209}
   - component: {fileID: 9061805942152556345}
   - component: {fileID: 3032446160920949861}
+  - component: {fileID: 1996094129437779311}
   m_Layer: 0
   m_Name: BulletHellShip
   m_TagString: Untagged
@@ -48,6 +49,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,6 +99,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 8
   _emitter: {fileID: 3975391537279770265}
+--- !u!114 &1996094129437779311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688060684129577995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd53333b108867d4fb6ac8ad0b456f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _channel: {fileID: 11400000, guid: c14909329bf53f44b9045a88f7d980bf, type: 2}
+  _alignment: {fileID: 11400000, guid: 53b0a8cfe4730164b964d1437bc49f30, type: 2}
+  _colliderRadius: 0.1
 --- !u!1 &1177136417056519000
 GameObject:
   m_ObjectHideFlags: 0

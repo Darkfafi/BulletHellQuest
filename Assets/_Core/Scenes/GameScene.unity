@@ -172,7 +172,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 288
+    m_Bits: 256
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 189850555}
   - component: {fileID: 189850554}
   m_Layer: 0
-  m_Name: ProjectilesPoolChannelsCenter
+  m_Name: ProjectilesManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,8 +320,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f313f3dc5b1be14ba10ebf3e298f90b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pools:
+  _projectileTargetChannel: {fileID: 11400000, guid: c14909329bf53f44b9045a88f7d980bf,
+    type: 2}
+  _poolChannels:
   - {fileID: 11400000, guid: 48fe1f5bd2737ea4a80bd4bc8526cfee, type: 2}
+  _alignmentsToCheckCollision:
+  - {fileID: 11400000, guid: e592328f54e371a4e99a9f741e0f0c0f, type: 2}
+  - {fileID: 11400000, guid: 53b0a8cfe4730164b964d1437bc49f30, type: 2}
 --- !u!4 &189850555
 Transform:
   m_ObjectHideFlags: 0
@@ -609,7 +614,7 @@ GameObject:
   - component: {fileID: 741190147}
   - component: {fileID: 741190149}
   - component: {fileID: 741190148}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: ViewportTheme
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -703,7 +708,7 @@ Transform:
   m_Children:
   - {fileID: 1314618093}
   - {fileID: 1878647666}
-  - {fileID: 1331058432}
+  - {fileID: 1238214626}
   m_Father: {fileID: 872841620}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1083,6 +1088,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1238214625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1238214626}
+  - component: {fileID: 1238214627}
+  m_Layer: 0
+  m_Name: BossStage2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1238214626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238214625}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 854220431}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1238214627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238214625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc9a2bb29a65ae46a952f786648ae16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthAmount: 100
 --- !u!224 &1273470435 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7796178824718737575, guid: eea7310a52b21f246b1ff33c379e8c8e,
@@ -1131,50 +1180,6 @@ Transform:
   m_Father: {fileID: 854220431}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
---- !u!1 &1331058431
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1331058432}
-  - component: {fileID: 1331058433}
-  m_Layer: 0
-  m_Name: BossStage2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1331058432
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331058431}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 854220431}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1331058433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331058431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fc9a2bb29a65ae46a952f786648ae16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthAmount: 200
 --- !u!1 &1463729507
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1458,7 @@ GameObject:
   - component: {fileID: 1636115740}
   - component: {fileID: 1636115739}
   - component: {fileID: 1636115738}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: ViewportBackCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

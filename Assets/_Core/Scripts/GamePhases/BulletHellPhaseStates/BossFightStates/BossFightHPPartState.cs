@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,11 +29,18 @@ public class BossFightHPPartState : BossFightStateBase
 	protected override void OnEnter()
 	{
 		_healthPart.Refresh();
+
+		StateParent.BossInstance.ProjectileTarget.OnCollisionEnter += OnBossHitEvent;
 	}
 
 	protected override void OnExit()
 	{
 		_healthPart.Kill();
+
+		if(StateParent != null && StateParent.BossInstance != null && StateParent.BossInstance.ProjectileTarget != null)
+		{
+			StateParent.BossInstance.ProjectileTarget.OnCollisionEnter -= OnBossHitEvent;
+		}
 	}
 
 	public override void Deinitialize()
@@ -42,5 +50,10 @@ public class BossFightHPPartState : BossFightStateBase
 			StateParent.BossHealth.RemoveHealthPart(_healthPart);
 		}
 		base.Deinitialize();
+	}
+
+	private void OnBossHitEvent(Projectile projectile, ProjectileTarget target)
+	{
+		_healthPart.Damage(1);
 	}
 }

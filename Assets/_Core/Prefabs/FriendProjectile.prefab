@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5199325968152958842}
   - component: {fileID: 4353235495481431113}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: FriendProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,3 +95,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e52c5c73d48f94ea46606a31e1b8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _alignment: {fileID: 11400000, guid: e592328f54e371a4e99a9f741e0f0c0f, type: 2}
+  _colliderRadius: 0.16

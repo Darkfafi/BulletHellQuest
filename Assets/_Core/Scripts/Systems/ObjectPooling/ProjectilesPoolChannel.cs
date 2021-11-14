@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu( menuName = "Pools/ProjectilesPoolChannel", fileName = "ProjectilesPoolChannel")]
+[CreateAssetMenu( menuName = "Channels/ProjectilesPoolChannel", fileName = "ProjectilesPoolChannel")]
 public class ProjectilesPoolChannel : ScriptableObject
 {
 	[SerializeField]

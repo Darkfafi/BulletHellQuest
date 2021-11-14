@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 6287649220133327902}
   - component: {fileID: 5182914131622205982}
   - component: {fileID: 3720838627660650797}
+  - component: {fileID: 5671492087948301989}
   m_Layer: 0
   m_Name: BossFightShip
   m_TagString: Untagged
@@ -294,6 +295,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -341,3 +343,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb0f8cddd80ece48bd99a7b09eb758d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _projectileTarget: {fileID: 5671492087948301989}
+--- !u!114 &5671492087948301989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720838627660650796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd53333b108867d4fb6ac8ad0b456f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _channel: {fileID: 11400000, guid: c14909329bf53f44b9045a88f7d980bf, type: 2}
+  _alignment: {fileID: 11400000, guid: e592328f54e371a4e99a9f741e0f0c0f, type: 2}
+  _colliderRadius: 0.4
