@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour, IStatesParent
 	public void GoToNextPhase()
 	{
 		_fsm.GoToNextState();
+
+		if (_fsm.CurrentState == null)
+		{
+			_fsm.StartStateMachine();
+		}
 	}
 
 	#endregion

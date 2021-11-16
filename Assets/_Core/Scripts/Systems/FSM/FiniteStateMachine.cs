@@ -32,7 +32,7 @@ public class FiniteStateMachine<TStatesParent> : IDisposable
 
 	public void StartStateMachine()
 	{
-		if(!IsRunning)
+		if(!IsRunning && States.Length > 0)
 		{
 			SetState(States[0]);
 		}
@@ -46,16 +46,18 @@ public class FiniteStateMachine<TStatesParent> : IDisposable
 		}
 	}
 
-	public void GoToNextState()
+	public bool GoToNextState()
 	{
 		int nextStateIndex = Array.IndexOf(States, CurrentState) + 1;
 		if (nextStateIndex < 0 || nextStateIndex >= States.Length)
 		{
 			SetState(null);
+			return false;
 		}
 		else
 		{
 			SetState(States[nextStateIndex]);
+			return true;
 		}
 	}
 

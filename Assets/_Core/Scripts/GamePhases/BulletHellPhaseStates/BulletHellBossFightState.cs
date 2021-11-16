@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BulletHellBossFightState : BulletHellPhaseStateBase, IStatesParent
+public class BulletHellBossFightState : BulletHellPhaseStateBase, IBossFightStateParent
 {
 	#region Editor Variables
 
@@ -18,7 +18,7 @@ public class BulletHellBossFightState : BulletHellPhaseStateBase, IStatesParent
 
 	#region Variables
 
-	private FiniteStateMachine<BulletHellBossFightState> _fsm = null;
+	private FiniteStateMachine<IBossFightStateParent> _fsm = null;
 
 	#endregion
 
@@ -36,12 +36,22 @@ public class BulletHellBossFightState : BulletHellPhaseStateBase, IStatesParent
 
 	#endregion
 
+	public void GoToNextState()
+	{
+		_fsm.GoToNextState();
+
+		if(_fsm.CurrentState == null)
+		{
+			StateParent.GoToNextState();
+		}
+	}
+
 	public override void Initialize(BulletHellGamePhaseState parent)
 	{
 		base.Initialize(parent);
 		BossHealth = new Health();
 
-		_fsm = new FiniteStateMachine<BulletHellBossFightState>(this, transform.GetStates<BulletHellBossFightState>(), false);
+		_fsm = new FiniteStateMachine<IBossFightStateParent>(this, transform.GetStates<IBossFightStateParent>(), false);
 	}
 
 	protected override void OnEnter()
@@ -80,7 +90,7 @@ public class BulletHellBossFightState : BulletHellPhaseStateBase, IStatesParent
 	{
 		if (BossInstance != null)
 		{
-			Destroy(BossInstance);
+			Destroy(BossInstance.gameObject);
 			BossInstance = null;
 		}
 	}

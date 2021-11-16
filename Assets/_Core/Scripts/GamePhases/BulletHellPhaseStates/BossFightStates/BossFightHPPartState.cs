@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
-public class BossFightHPPartState : BossFightStateBase
+public class BossFightHPPartState : BossFightStateBase, IBossFightStateParent
 {
 	#region Editor Variables
 
@@ -15,15 +13,29 @@ public class BossFightHPPartState : BossFightStateBase
 	#region Variables
 
 	private HealthPart _healthPart = null;
+	private FiniteStateMachine<IBossFightStateParent> _fsm;
+
+	public BossShip BossInstance => StateParent.BossInstance;
+	public Health BossHealth => StateParent.BossHealth;
 
 	#endregion
 
-	public override void Initialize(BulletHellBossFightState parent)
+	public override void Initialize(IBossFightStateParent parent)
 	{
 		base.Initialize(parent);
 
 		_healthPart = new HealthPart(_healthAmount);
 		parent.BossHealth.AddHealthPart(_healthPart);
+
+		_fsm = new FiniteStateMachine<IBossFightStateParent>(this, transform.GetStates<IBossFightStateParent>(), false);
+	}
+
+	public void GoToNextState()
+	{
+		if (!_fsm.GoToNextState())
+		{
+			_fsm.StartStateMachine();
+		}
 	}
 
 	protected override void OnEnter()
@@ -31,10 +43,14 @@ public class BossFightHPPartState : BossFightStateBase
 		_healthPart.Refresh();
 
 		StateParent.BossInstance.ProjectileTarget.OnCollisionEnter += OnBossHitEvent;
+
+		_fsm.StartStateMachine();
 	}
 
 	protected override void OnExit()
 	{
+		_fsm.StopStateMachine();
+
 		_healthPart.Kill();
 
 		if(StateParent != null && StateParent.BossInstance != null && StateParent.BossInstance.ProjectileTarget != null)
@@ -55,5 +71,10 @@ public class BossFightHPPartState : BossFightStateBase
 	private void OnBossHitEvent(Projectile projectile, ProjectileTarget target)
 	{
 		_healthPart.Damage(1);
+
+		if(_healthPart.HP == 0)
+		{
+			StateParent.GoToNextState();
+		}
 	}
 }

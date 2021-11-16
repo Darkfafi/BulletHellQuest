@@ -28,6 +28,16 @@ public class BulletHellGamePhaseState : GamePhaseStateBase, IStatesParent
 
 	#endregion
 
+	public void GoToNextState()
+	{
+		_fsm.GoToNextState();
+
+		if (_fsm.CurrentState == null)
+		{
+			StateParent.GoToNextPhase();
+		}
+	}
+
 	public override void Initialize(GameManager parent)
 	{
 		base.Initialize(parent);

@@ -19,16 +19,13 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 	[SerializeField]
 	private float _delayBetweenLoops = 1f;
 	[SerializeField]
-	private AnimationCurve _movement = AnimationCurve.Constant(0f, 1f, 0f);
-	[SerializeField]
-	private AnimationCurve _fullPath = AnimationCurve.Linear(0f, 0f, 10f, 10f);
+	private EntityPathData _projectilePath = EntityPathData.Default(10f, 10f);
 
 	[Header("Requirements")]
 	[SerializeField]
 	private ProjectilesPoolChannel _projectilesPoolChannel = null;
-	[SerializeField]
-	private ProjectilesPool _projectilesPool = null;
 
+	private ProjectilesPool _projectilesPool = null;
 	private List<Projectile> _currentProjectiles = new List<Projectile>();
 	private Coroutine _projectilesRoutine = null;
 
@@ -71,7 +68,13 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 					Projectile projectile = _projectilesPool.Pop(null);
 					projectile.transform.position = emitterPos;
 					projectile.transform.rotation = Quaternion.Euler(0f, 0f, emitterAngle);
-					projectile.StartCoroutine(ProjectileRoutine(projectile, fireDirection, _movement, _fullPath));
+					projectile.StartCoroutine(_projectilePath.PathRoutine(projectile, fireDirection, (p)=> 
+					{
+						if (Mathf.Approximately(p, 1f))
+						{
+							_projectilesPool.Push(projectile);
+						}
+					}));
 					_currentProjectiles.Add(projectile);
 				}
 			}
@@ -80,30 +83,6 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 		} while (_loopCount < 0 || loopsFinished < _loopCount);
 
 		StopEmitter();
-	}
-
-	private IEnumerator ProjectileRoutine(Projectile projectile, Vector2 direction, AnimationCurve movement, AnimationCurve fullPath)
-	{
-		Vector2 startPos = projectile.transform.position;
-		float perpendicularAngle = Mathf.Atan2(direction.y, direction.x) + (Mathf.PI / 2f);
-		Vector2 perpendicularDirection = new Vector2(Mathf.Cos(perpendicularAngle), Mathf.Sin(perpendicularAngle));
-
-		float t = 0f;
-		float d = _fullPath[_fullPath.length - 1].time;
-		while (t <= d)
-		{
-			float p = t / d;
-
-			projectile.transform.position =
-				startPos +
-				(direction * fullPath.Evaluate(t)) +
-				(perpendicularDirection * movement.Evaluate(p));
-
-			t += Time.deltaTime;
-			yield return null;
-		}
-
-		_projectilesPool.Push(projectile);
 	}
 
 	private bool TryGetEmitterData(int index, out Vector2 emitterPos, out float emitterAngle, out Vector2 emitterDirection)

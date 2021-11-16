@@ -23,6 +23,10 @@ public class ProjectileTarget : MonoBehaviour
 	[SerializeField]
 	private float _colliderRadius = 1f;
 
+	[Header("Editor")]
+	[SerializeField]
+	private Projectile _overlapProjectileTest = null;
+
 	#endregion
 
 	#region Variables
@@ -90,6 +94,19 @@ public class ProjectileTarget : MonoBehaviour
 	protected void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
+
+		if(_overlapProjectileTest != null)
+		{
+			if(Overlaps(_overlapProjectileTest))
+			{
+				Gizmos.color = Color.green;
+			}
+			else
+			{
+				Gizmos.color = Color.red;
+			}
+		}
+
 		Gizmos.DrawWireSphere(transform.position, _colliderRadius);
 	}
 }

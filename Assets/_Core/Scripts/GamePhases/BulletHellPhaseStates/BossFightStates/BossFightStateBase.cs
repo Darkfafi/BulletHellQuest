@@ -1,3 +1,3 @@
-﻿public abstract class BossFightStateBase : MonoBehaviourStateBase<BulletHellBossFightState>
+﻿public abstract class BossFightStateBase : MonoBehaviourStateBase<IBossFightStateParent>
 {
 }
