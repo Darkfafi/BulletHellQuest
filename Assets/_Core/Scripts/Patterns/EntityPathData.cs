@@ -19,9 +19,9 @@ public struct EntityPathData
 		Movement = movement;
 	}
 
-	public Vector2 Evaluate(float p, Vector2 direction)
+	public Vector2 EvaluateDirection(float p, Vector2 direction)
 	{
-		float d = FullPath[FullPath.length - 1].time;
+		float d = FullPath.GetDuration();
 		float pFP = d * p;
 		float perpendicularAngle = Mathf.Atan2(direction.y, direction.x) + (Mathf.PI / 2f);
 		Vector2 perpendicularDirection = new Vector2(Mathf.Cos(perpendicularAngle), Mathf.Sin(perpendicularAngle));
@@ -43,28 +43,17 @@ public struct EntityPathData
 		Vector2 startPos = target.transform.position;
 		float perpendicularAngle = Mathf.Atan2(direction.y, direction.x) + (Mathf.PI / 2f);
 		Vector2 perpendicularDirection = new Vector2(Mathf.Cos(perpendicularAngle), Mathf.Sin(perpendicularAngle));
+		AnimationCurve movementCurve = Movement;
 
-		float t = 0f;
-		float d = FullPath[FullPath.length - 1].time;
-		while (t <= d)
+		yield return FullPath.AnimationCurveRoutine((v, p, t, d) => 
 		{
-			float p = Mathf.Clamp01(t / d);
-
 			target.transform.position =
 				startPos +
-				(direction * FullPath.Evaluate(t)) +
-				(perpendicularDirection * Movement.Evaluate(p));
+				(direction * v) +
+				(perpendicularDirection * movementCurve.Evaluate(p));
 
 			progressCallback?.Invoke(p);
-
-			if(Mathf.Approximately(p, 1f))
-			{
-				break;
-			}
-
-			t = Mathf.Clamp(t + Time.deltaTime, 0f, d);
-			yield return null;
-		}
+		});
 	}
 }
 

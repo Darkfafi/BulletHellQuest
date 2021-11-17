@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b8d415e9f469b47bd314265ec6d169, type: 3}
   m_Name: EnemyProjectilesPoolChannel
   m_EditorClassIdentifier: 
-  _initialPoolCount: 200
+  _initialPoolCount: 800
   _prefab: {fileID: 4353235495481431113, guid: cd02251f6348b354fa218e1759a3dbc3, type: 3}

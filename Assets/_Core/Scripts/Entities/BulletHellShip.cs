@@ -11,7 +11,14 @@ public class BulletHellShip : MonoBehaviour
 	protected void Update()
 	{
 		InputSystem inputSystem = InputSystem.Instance;
-		transform.Translate(new Vector3(inputSystem.Horizontal, inputSystem.Vertical).normalized * Time.deltaTime * _speed);
+
+		float speed = _speed;
+		if (inputSystem.IsActionPressed( InputSystem.ActionType.Fire2))
+		{
+			speed *= 0.5f;
+		}
+
+		transform.Translate(new Vector3(inputSystem.Horizontal, inputSystem.Vertical).normalized * Time.deltaTime * speed);
 
 		if(inputSystem.IsActionPressed( InputSystem.ActionType.Fire1))
 		{

@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BossBehaviourState : BossFightStateBase
 {
 	#region Editor Variables
+
+	[SerializeField]
+	private EntityPathData _pathToStartPos = EntityPathData.Default();
 
 	[SerializeField, Range(0f, 360)]
 	private float _directionAngle = 0f;
@@ -34,6 +38,38 @@ public class BossBehaviourState : BossFightStateBase
 
 	protected override void OnEnter()
 	{
+		_behaviourRoutine = StartCoroutine(BossBehaviourRoutine());
+	}
+
+	protected override void OnExit()
+	{
+		if (_behaviourRoutine != null)
+		{
+			StopCoroutine(_behaviourRoutine);
+			_behaviourRoutine = null;
+		}
+
+		if (_emitter != null)
+		{
+			_emitter.StopEmitters();
+
+			if (_attachEmitterToBossShip)
+			{
+				if (_attachedEmitterPrePos.HasValue)
+				{
+					_emitter.transform.SetParent(_preEmitterParent);
+					_emitter.transform.localPosition = _attachedEmitterPrePos.Value;
+				}
+				else
+				{
+					_emitter = null;
+				}
+			}
+		}
+	}
+
+	protected IEnumerator BossBehaviourRoutine()
+	{
 		if (_attachEmitterToBossShip)
 		{
 			if (_emitter == null)
@@ -49,12 +85,14 @@ public class BossBehaviourState : BossFightStateBase
 			}
 		}
 
+		Vector2 dirToStart = transform.position - StateParent.BossInstance.transform.position;
+		yield return _pathToStartPos.PathRoutine(StateParent.BossInstance, dirToStart, null);
+
 		float angle = _directionAngle + transform.rotation.eulerAngles.z;
-		StateParent.BossInstance.transform.position = transform.position;
 		int emitStage = 0;
-		_behaviourRoutine = StartCoroutine(
-			_bossPathData.PathRoutine(StateParent.BossInstance,
-			angle.FromAngleToVector2(), (p)=>
+
+		yield return _bossPathData.PathRoutine(StateParent.BossInstance,
+			angle.FromAngleToVector2(), (p) =>
 			{
 				if (_emitter != null)
 				{
@@ -68,7 +106,7 @@ public class BossBehaviourState : BossFightStateBase
 							}
 							break;
 						case 1:
-							if(p >= _endEmitterTime)
+							if (p >= _endEmitterTime)
 							{
 								_emitter.StopEmitters();
 								emitStage = 2;
@@ -77,39 +115,12 @@ public class BossBehaviourState : BossFightStateBase
 					}
 				}
 
-				if(Mathf.Approximately(p, 1f))
+				if (Mathf.Approximately(p, 1f))
 				{
 					StateParent.GoToNextState();
 				}
-			})
+			}
 		);
-	}
-
-	protected override void OnExit()
-	{
-		if (_behaviourRoutine != null)
-		{
-			StopCoroutine(_behaviourRoutine);
-			_behaviourRoutine = null;
-		}
-
-		if (_emitter != null)
-		{
-			_emitter.StopEmitters();
-		}
-
-		if (_attachEmitterToBossShip)
-		{
-			if (_attachedEmitterPrePos.HasValue)
-			{
-				_emitter.transform.SetParent(_preEmitterParent);
-				_emitter.transform.localPosition = _attachedEmitterPrePos.Value;
-			}
-			else
-			{
-				_emitter = null;
-			}
-		}
 	}
 
 #if UNITY_EDITOR
@@ -128,7 +139,7 @@ public class BossBehaviourState : BossFightStateBase
 		for (int t = 0; t <= 100; t++)
 		{
 			float p = t / 100f;
-			Vector2 endPos = origin + _bossPathData.Evaluate(p, dir);
+			Vector2 endPos = origin + _bossPathData.EvaluateDirection(p, dir);
 			Gizmos.DrawLine(pos, endPos);
 			pos = endPos;
 		}

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,6 +8,9 @@ using UnityEngine;
 
 public class ProjectilesEmitterSystem : MonoBehaviour
 {
+	public event Action<ProjectilesEmitterSystem> EmitterStartedEvent;
+	public event Action<ProjectilesEmitterSystem> EmitterStoppedEvent;
+
 	[Header("Options")]
 	[SerializeField, Range(1, 100)]
 	private int _emitAmount = 1;
@@ -28,18 +32,30 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 	private ProjectilesPool _projectilesPool = null;
 	private List<Projectile> _currentProjectiles = new List<Projectile>();
 	private Coroutine _projectilesRoutine = null;
+	private float _originalRadius = 0f;
+
+	public bool IsRunning => _projectilesRoutine != null;
 
 	protected void Awake()
 	{
-		if (_projectilesPoolChannel != null)
-		{
-			_projectilesPool = _projectilesPoolChannel.ProjectilesPool;
-		}
+		_originalRadius = _emittersRadius;
+		_projectilesPool = _projectilesPoolChannel.ProjectilesPool;
+		ResetRadius();
+	}
+
+	public void OverrideRadius(float overrideRadius)
+	{
+		_emittersRadius = overrideRadius;
+	}
+
+	public void ResetRadius()
+	{
+		_emittersRadius = _originalRadius;
 	}
 
 	public void StartEmitter()
 	{
-		if (_projectilesRoutine == null)
+		if (!IsRunning)
 		{
 			_projectilesRoutine = StartCoroutine(ProjectilesRoutine());
 		}
@@ -47,16 +63,18 @@ public class ProjectilesEmitterSystem : MonoBehaviour
 
 	public void StopEmitter()
 	{
-		if (_projectilesRoutine != null)
+		if (IsRunning)
 		{
 			StopCoroutine(_projectilesRoutine);
 			_projectilesRoutine = null;
-
+			EmitterStoppedEvent?.Invoke(this);
 		}
 	}
 
 	private IEnumerator ProjectilesRoutine()
 	{
+		EmitterStartedEvent?.Invoke(this);
+
 		int loopsFinished = 0;
 
 		do
